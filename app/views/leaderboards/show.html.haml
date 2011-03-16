@@ -1,0 +1,29 @@
+-[["",@qualified],["Missed Cut", @not_qualified], ["Withdrawn",@withdrawn]].each do |title, player_records|
+  %h5=title
+  %table.minimalist-table.plain-table.clear
+    %thead
+      %tr
+        %th.left{:title=>"Position"} Pos.
+        %th.left{:title=>""} Name
+        -1.upto(@event.total_number_of_rounds).each do |i|
+          %th.left{:title=>""}=i
+        %th.left{:title=>""} Total
+        %th.left{:title=>""} Strokes
+        %th.left{:title=>""} Scorecard
+    %tbody
+      -(player_records || []).each do |record|
+        %tr
+          %td.left=record.match_player.formatted_place
+          %td.left
+            =record.player.full_name
+            -((record.rounds || []).length < @event.total_number_of_rounds ? @event.total_number_of_rounds : (record.rounds || []).length).times do |index|
+              -if(record.rounds[index].blank?)
+                %td.left -
+              -else
+                %td.left=(record.rounds[index].try(:score).blank? ? (record.rounds[index].tee_time.to_s(:basic_time) unless record.rounds[index].try(:tee_time).blank?) : record.rounds[index].try(:score)).with_default("--")
+          %td.left=record.score_total.with_default("--")
+          %td.left=record.total_strokes.with_default("--")
+          / %td.left=link_to("Scoring", pga_leaderboard_scorecard_path(@event, record))
+          %td.left=link_to("Scoring - FIX", "http://fixme.com")
+.legend
+  * Wins in Playoff
