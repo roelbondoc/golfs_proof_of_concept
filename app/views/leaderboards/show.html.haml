@@ -1,4 +1,4 @@
--[["",@qualified],["Missed Cut", @not_qualified], ["Withdrawn",@withdrawn]].each do |title, player_records|
+-[["",@qualified],["Missed Cut", @not_qualified], ["Withdrawn",@withdrawn]].each do |title, matches|
   %h5=title
   %table.minimalist-table.plain-table.clear
     %thead
@@ -11,19 +11,19 @@
         %th.left{:title=>""} Strokes
         %th.left{:title=>""} Scorecard
     %tbody
-      -(player_records || []).each do |record|
+      -(matches || []).each do |match|
         %tr
-          %td.left=record.match_player.formatted_place
+          %td.left=match.match_player.formatted_place
           %td.left
-            =record.player.full_name
-            -((record.rounds || []).length < @event.total_number_of_rounds ? @event.total_number_of_rounds : (record.rounds || []).length).times do |index|
-              -if(record.rounds[index].blank?)
+            =match.player.full_name
+            -((match.rounds || []).length < @event.total_number_of_rounds ? @event.total_number_of_rounds : (match.rounds || []).length).times do |index|
+              -if(match.rounds[index].blank?)
                 %td.left -
               -else
-                %td.left=(record.rounds[index].try(:score).blank? ? (record.rounds[index].tee_time.to_s(:basic_time) unless record.rounds[index].try(:tee_time).blank?) : record.rounds[index].try(:score)).with_default("--")
-          %td.left=record.score_total.with_default("--")
-          %td.left=record.total_strokes.with_default("--")
-          / %td.left=link_to("Scoring", pga_leaderboard_scorecard_path(@event, record))
-          %td.left=link_to("Scoring - FIX", "http://fixme.com")
+                %td.left=(match.rounds[index].try(:score).blank? ? (match.rounds[index].tee_time.to_s(:basic_time) unless match.rounds[index].try(:tee_time).blank?) : match.rounds[index].try(:score)).with_default("--")
+          %td.left=match.score_total.with_default("--")
+          %td.left=match.total_strokes.with_default("--")
+          / %td.left=link_to("Scoring", leaderboard_scorecard_path('pga', @event, match))
+          %td.left=link_to("Scoring", "/pga/leaderboards/#{@event.id}/scorecard/#{match.id}")
 .legend
   * Wins in Playoff

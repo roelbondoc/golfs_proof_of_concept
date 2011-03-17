@@ -11,6 +11,7 @@ gem 'mysql2'
 
 gem "haml"#, "2.2.10"
 
+gem 'feedzirra'
 gem 'the_score_data', :path => "/Users/tsyed/Sites/thescore-refactor/thescore-data"
 
 # Use unicorn as the web server

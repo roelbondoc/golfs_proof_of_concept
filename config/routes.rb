@@ -2,7 +2,7 @@ GolfsProofOfConcept::Application.routes.draw do
   
   scope '/:league_slug' do
     resources :leaderboards do
-      
+      resources :scorecard
     end
   end
   

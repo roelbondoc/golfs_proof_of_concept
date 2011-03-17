@@ -1,0 +1,64 @@
+#head_content
+  .body{:style=>"width:100%; overflow:auto"}
+    %h1{:style=>"width:60%; float: left"}
+      = @event.try(:tourn_name)
+      %br
+      ="Scoring: #{@match.player.full_name}"
+#body_content.body
+  -if @match.nil?
+    %p
+      No Data Available
+  -else
+    %table
+      %tr
+        %td.left
+          %b Place:
+          %span=@match.match_player.formatted_place
+        %td.left
+          %b Round:
+          %span=@match.try(:round)
+        %td.left
+          %b Current Score:
+          %span= @match.try(:score_current)
+        %td.left
+          %b Total Score:
+          %span=@match.try(:score_total)
+        %td.left
+          %b Total Strokes:
+          %span=@match.try(:total_strokes)
+    -(@match.rounds || []).reverse.each do |round|
+      %table.minimalist-table.pga_statistics.clear{:style=>"border-right:1px solid #dfdfdf;border-left:1px solid #dfdfdf;"}
+        %thead
+          %tr
+            %th{:colspan=>3}="Round #{round.try(:round).to_s}"
+            %th.right{:colspan=>17}="Thru: #{round.try(:thru)}"
+          -holes = (round.holes || [])
+          %tr
+            %th.left HOLE
+            -holes.each do |hole|
+              %th=hole.hole
+            -(18 - holes.length).times do
+              %th
+            %th Total
+          - round_par = @event.total_par_for_round(round.try(:round)) rescue nil
+          %tr
+            %td.left{:style=>"padding-left:10px !important;"} Par
+            -holes.each do |hole|
+              %td.l= hole.par
+            -(18 - holes.length).times do
+              %td.l
+            %td.l= round_par
+          %tr
+            %td.left{:style=>"padding-left:10px !important;"} Strokes
+            -holes.each do |hole|
+              %td.l= hole.strokes
+            -(18 - holes.length).times do
+              %td.l
+            %td.l= round.score.with_default("--")
+          %tr
+            %td.left{:style=>"padding-left:10px !important;"} To Par
+            -holes.each do |hole|
+              %td.l= hole.to_par_score
+            -(18 - holes.length).times do
+              %td.l
+            %td.l= round.score - round_par rescue '--'
