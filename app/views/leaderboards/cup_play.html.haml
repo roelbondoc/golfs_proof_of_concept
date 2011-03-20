@@ -1,0 +1,18 @@
+%table.minimalist-table.plain-table.clear
+  - @matches.group_by(&:cup_name).each do |cup_name, matches|
+    %thead
+      %tr
+        %th.left{:colspan => 4}= cup_name
+      %tr
+        %th.left= matches.first.match_teams.first.name
+        %th.left= matches.first.match_teams.last.name
+        %th.left Holes
+        %th.left Status
+    %tbody
+      - matches.each do |match|
+        %tr
+          %td.left
+            = [(match.match_players.by_team(match.match_teams.first).first.player.last_name rescue nil), (match.match_players.by_team(match.match_teams.first).last.player.last_name rescue nil)].compact.join("/")
+          %td.left.l
+            = [(match.match_players.by_team(match.match_teams.last).first.player.last_name rescue nil), (match.match_players.by_team(match.match_teams.last).last.player.last_name rescue nil)].compact.join("/")
+          %td.left.l= match.status
