@@ -1,0 +1,15 @@
+%table.minimalist-table.plain-table.clear
+  - @round_range.each do |round|
+    %thead
+      %tr
+        %th.left{:colspan => 3}= "Round #{round}"
+      %tr
+        %th.left Match
+        %th.left Thru
+        %th.left Score
+    %tbody
+      - @grouped_matches[round].each do |match|
+        %tr
+          %td.left= "#{match.match_players[0].player.short_name} v #{match.match_players[1].player.short_name}"
+          %td.left.l= match.formatted_thru
+          %td.left.l= match.status_string
